@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Clinical Pulse | Blood Bank Management</title>
+
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#526772",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#cfe6f2",
+                        "on-primary-container": "#fff2f0",
+                        "surface": "#f8fafb",
+                        "background": "#f8fafb",
+                        "surface-container-low": "#f2f4f5",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-surface": "#191c1d",
+                        "on-primary": "#ffffff",
+                        "outline": "#8f6f6c",
+                        "primary-container": "#d32f2f",
+                        "primary-fixed": "#ffdad6",
+                        "on-secondary-fixed-variant": "#354a53",
+                        "inverse-on-surface": "#eff1f2",
+                        "surface-container-high": "#e6e8e9",
+                        "tertiary-fixed": "#bee9ff",
+                        "tertiary": "#005f7b",
+                        "surface-container": "#eceeef",
+                        "on-tertiary-container": "#e9f7ff",
+                        "tertiary-container": "#00799c",
+                        "primary": "#af101a",
+                        "outline-variant": "#e4beba",
+                        "surface-variant": "#e1e3e4",
+                        "secondary-container": "#cfe6f2",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#ffb3ac",
+                        "on-surface-variant": "#5b403d",
+                        "on-tertiary-fixed-variant": "#004d65",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#ba1a20",
+                        "on-background": "#191c1d",
+                        "on-primary-fixed-variant": "#930010",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#071e27",
+                        "tertiary-fixed-dim": "#7bd1f8",
+                        "surface-dim": "#d8dadb",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f8fafb",
+                        "on-tertiary-fixed": "#001f2a",
+                        "on-primary-fixed": "#410003",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#b4cad6",
+                        "secondary": "#4c616c",
+                        "inverse-surface": "#2e3132",
+                        "inverse-primary": "#ffb3ac"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-6 h-16 w-full fixed top-0 z-50 bg-white dark:bg-slate-950 tonal-shift bg-slate-50 dark:bg-slate-900">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-red-700 dark:text-red-500">The Clinical Pulse</span>
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-1.5 gap-2">
+<span class="material-symbols-outlined text-on-secondary-container text-sm">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-64" placeholder="Search records..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="flex items-center gap-3 ml-2 pl-4 border-l border-surface-container-highest">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold text-on-surface">Dr.  Nimish Makwana</p>
+<p class="text-[10px] text-on-secondary-container">Chief Medical Officer</p>
+</div>
+<img alt="Chief Medical Officer" class="w-10 h-10 rounded-full object-cover border-2 border-primary-container" data-alt="portrait of a female medical professional in clinical attire with a stethoscope, clean white background, soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBavQpdKRHpsvCK1WdXe786aBBL5YCTHitxPSccu2MrCag4nekgRoi9U7VH0Sa75jqQVbFEgjIwly1sYzer0MNan6thnjlCOHENulsli2Yu_4DlK5CyltwJYeAmmrBQOSGOj9raq82lmBHfSQVtnlhgFEiyQonXPBrT4kP0WPofwJKQ7zasbsX5VjDWxwYC6fcDVBRck7N8VhTsrStRRwzwfByLB-nORCb7Ku-hSYX6_x5CT3yxL8tnyV8qK7RbCMNPZU2iQhQfG5c"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full pt-20 flex flex-col z-40 bg-slate-50 dark:bg-slate-900 border-none w-64">
+<div class="px-6 mb-8">
+<h2 class="text-lg font-black text-slate-900 dark:white">Pulse Admin</h2>
+<p class="text-xs text-on-secondary-container">Central Blood Bank</p>
+</div>
+<nav class="flex-1 space-y-1 px-3">
+<!-- Active Tab: Inventory -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-teal-700 dark:text-teal-400 font-bold border-r-4 border-teal-600 dark:border-teal-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined">bloodtype</span>
+<span class="text-sm font-headline tracking-wider uppercase">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">emergency</span>
+<span class="text-sm font-headline tracking-wider uppercase">Hospital Requests</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-headline tracking-wider uppercase">Donors</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="text-sm font-headline tracking-wider uppercase">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:white hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span class="text-sm font-headline tracking-wider uppercase">Settings</span>
+</a>
+</nav>
+<div class="p-6 mt-auto">
+<button class="w-full py-3 rounded-xl bg-gradient-to-br from-primary to-primary-container text-white font-bold text-sm shadow-lg hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">campaign</span>
+                Emergency Alert
+            </button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="pl-64 pt-20 pr-6 pb-12 min-h-screen bg-surface">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Dashboard Header -->
+<header class="flex justify-between items-end">
+<div>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface headline">Blood Bank Overview</h1>
+<p class="text-on-secondary-container mt-1">Real-time inventory monitoring and demand management.</p>
+</div>
+<div class="flex gap-3">
+<div class="bg-surface-container-lowest px-4 py-2 rounded-xl shadow-sm border border-outline-variant/10">
+<span class="block text-[10px] uppercase tracking-widest font-bold text-on-secondary-container">Status</span>
+<span class="text-tertiary font-bold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> System Stable
+                        </span>
+</div>
+</div>
+</header>
+<!-- Bento Grid: Analytics & Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Inventory Chart Section -->
+<section id="section-inventory" class="lg:col-span-8 bg-surface-container-lowest p-8 rounded-xl relative overflow-hidden">
+<div class="flex justify-between items-center mb-10">
+<div>
+<h3 class="text-xl font-bold font-headline">Current Inventory by Blood Type</h3>
+<p class="text-sm text-on-secondary-container">Total Units: <span id="total-units"></span>1,248 ml</p>
+</div>
+<span class="material-symbols-outlined text-secondary opacity-40">bar_chart</span>
+</div>
+<!-- Simplified Custom Bar Chart -->
+<!-- Simplified Custom Bar Chart -->
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; width: 100%; height: 220px;">
+<!-- A+ -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-Apos" style="width: 100%; background: #d32f2f; border-radius: 4px 4px 0 0; height: 85%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; margin-top: 4px;">A+</span>
+<span id="units-Apos" style="font-size: 12px; font-weight: 700;">240</span>
+</div>
+<!-- A- -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-Aneg" style="width: 100%; background: #e57373; border-radius: 4px 4px 0 0; height: 45%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; margin-top: 4px;">A-</span>
+<span id="units-Aneg" style="font-size: 12px; font-weight: 700;">120</span>
+</div>
+<!-- B+ -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-Bpos" style="width: 100%; background: #d32f2f; border-radius: 4px 4px 0 0; height: 65%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; margin-top: 4px;">B+</span>
+<span id="units-Bpos" style="font-size: 12px; font-weight: 700;">180</span>
+</div>
+<!-- B- -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-Bneg" style="width: 100%; background: #e57373; border-radius: 4px 4px 0 0; height: 35%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; margin-top: 4px;">B-</span>
+<span id="units-Bneg" style="font-size: 12px; font-weight: 700;">95</span>
+</div>
+<!-- O+ -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-Opos" style="width: 100%; background: #d32f2f; border-radius: 4px 4px 0 0; height: 95%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; margin-top: 4px;">O+</span>
+<span id="units-Opos" style="font-size: 12px; font-weight: 700;">310</span>
+</div>
+<!-- O- -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-Oneg" style="width: 100%; background: #ba1a1a; border-radius: 4px 4px 0 0; height: 25%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; color: #ba1a1a; margin-top: 4px;">O-</span>
+<span id="units-Oneg" style="font-size: 12px; font-weight: 700; color: #ba1a1a;">42</span>
+</div>
+<!-- AB+ -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-ABpos" style="width: 100%; background: #e57373; border-radius: 4px 4px 0 0; height: 55%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; margin-top: 4px;">AB+</span>
+<span id="units-ABpos" style="font-size: 12px; font-weight: 700;">150</span>
+</div>
+<!-- AB- -->
+<div style="display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%;">
+<div id="bar-ABneg" style="width: 100%; background: #ef9a9a; border-radius: 4px 4px 0 0; height: 40%; margin-top: auto;"></div>
+<span style="font-size: 10px; font-weight: 700; margin-top: 4px;">AB-</span>
+<span id="units-ABneg" style="font-size: 12px; font-weight: 700;">111</span>
+</div>
+</div>
+</section>
+<!-- High Impact Metric Card -->
+<section class="lg:col-span-4 bg-gradient-to-br from-primary to-primary-container p-8 rounded-xl text-white flex flex-col justify-between">
+<div>
+<span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-80">Critical Shortage</span>
+<h2 id="critical-type" class="text-6xl font-extrabold mt-2 font-headline">O-</h2>
+<p id="critical-msg" class="mt-2 text-sm font-medium opacity-90">Inventory levels for O-Negative are currently at 12% of mandatory reserve levels. Action required.</p>
+</div>
+<button class="mt-8 bg-white/20 backdrop-blur-md hover:bg-white/30 text-white border border-white/30 py-3 rounded-lg font-bold text-sm transition-all">
+                        Request Transfer
+                    </button>
+</section>
+</div>
+<!-- Pending Hospital Requests -->
+<section id="section-requests" class="bg-surface-container-low rounded-xl overflow-hidden">
+<div class="px-8 py-6 flex justify-between items-center bg-surface-container-high/50">
+<div>
+<h3 class="text-xl font-bold font-headline">Pending Hospital Requests</h3>
+<p class="text-xs text-on-secondary-container mt-1">Priority-based emergency fulfillment queue</p>
+</div>
+<button class="text-tertiary font-bold text-sm hover:underline">View All Requests</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container bg-surface-container/30">
+<tr>
+<th class="px-8 py-4">Hospital Name</th>
+<th class="px-8 py-4">Blood Type</th>
+<th class="px-8 py-4">Units</th>
+<th class="px-8 py-4">Urgency</th>
+<th class="px-8 py-4 text-right">Status</th>
+</tr>
+</thead>
+<tbody id="requests-tbody" class="divide-y divide-surface-container">
+<!-- High Urgency Row -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-8 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-sm">St. Mary's General</span>
+<span class="text-[10px] text-on-secondary-container">Central Wing - ER</span>
+</div>
+</td>
+<td class="px-8 py-4"><span class="font-bold text-primary">O-</span></td>
+<td class="px-8 py-4 text-sm">8 Units</td>
+<td class="px-8 py-4">
+<span class="px-2.5 py-1 rounded-full bg-error-container text-on-error-container text-[10px] font-black uppercase">Critical</span>
+</td>
+<td class="px-8 py-4 text-right">
+<span class="text-[11px] font-semibold text-on-surface-variant flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-sm animate-pulse">sync</span> Processing
+                                    </span>
+</td>
+</tr>
+<!-- Medium Urgency Row -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-8 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-sm">City Pediatric Center</span>
+<span class="text-[10px] text-on-secondary-container">Surgery Unit B</span>
+</div>
+</td>
+<td class="px-8 py-4"><span class="font-bold text-primary">A+</span></td>
+<td class="px-8 py-4 text-sm">4 Units</td>
+<td class="px-8 py-4">
+<span class="px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-black uppercase">Medium</span>
+</td>
+<td class="px-8 py-4 text-right">
+<span class="text-[11px] font-semibold text-on-surface-variant flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-sm">schedule</span> Pending
+                                    </span>
+</td>
+</tr>
+<!-- Low Urgency Row -->
+<tr class="hover:bg-surface-container-lowest transition-colors">
+<td class="px-8 py-4">
+<div class="flex flex-col">
+<span class="font-bold text-sm">North Suburban Clinic</span>
+<span class="text-[10px] text-on-secondary-container">Standard Restock</span>
+</div>
+</td>
+<td class="px-8 py-4"><span class="font-bold text-primary">B+</span></td>
+<td class="px-8 py-4 text-sm">12 Units</td>
+<td class="px-8 py-4">
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-black uppercase">Low</span>
+</td>
+<td class="px-8 py-4 text-right">
+<span class="text-[11px] font-semibold text-on-surface-variant flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-sm">inventory_2</span> Logged
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Bottom Grid: Recent Donors -->
+<div class="grid grid-cols-1 gap-6">
+<section id="section-donors" class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/5">
+<div class="px-8 py-6 border-b border-surface-container">
+<h3 class="text-xl font-bold font-headline">Recent Donors</h3>
+</div>
+<div class="p-4 overflow-x-auto">
+<table class="w-full text-left">
+<thead class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container border-b border-surface-container">
+<tr>
+<th class="px-4 py-3">Donor Name</th>
+<th class="px-4 py-3">Type</th>
+<th class="px-4 py-3">Last Donation</th>
+<th class="px-4 py-3">Contact</th>
+<th class="px-4 py-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody id="donors-tbody">
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">RJ</div>
+<span class="font-bold text-sm">Robert Jenkins</span>
+</div>
+</td>
+<td class="px-4 py-5"><span class="font-bold text-sm bg-surface-container px-2 py-1 rounded">AB-</span></td>
+<td class="px-4 py-5 text-sm text-on-secondary-container">Oct 24, 2023</td>
+<td class="px-4 py-5 text-sm">r.jenkins@email.com</td>
+<td class="px-4 py-5 text-right">
+<button class="text-tertiary text-xs font-bold hover:underline">Schedule</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary font-bold text-xs">MA</div>
+<span class="font-bold text-sm">Maria Alverez</span>
+</div>
+</td>
+<td class="px-4 py-5"><span class="font-bold text-sm bg-surface-container px-2 py-1 rounded">O+</span></td>
+<td class="px-4 py-5 text-sm text-on-secondary-container">Nov 02, 2023</td>
+<td class="px-4 py-5 text-sm">+1 (555) 012-9922</td>
+<td class="px-4 py-5 text-right">
+<button class="text-tertiary text-xs font-bold hover:underline">Schedule</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold text-xs">TK</div>
+<span class="font-bold text-sm">Thomas Kalu</span>
+</div>
+</td>
+<td class="px-4 py-5"><span class="font-bold text-sm bg-surface-container px-2 py-1 rounded">A-</span></td>
+<td class="px-4 py-5 text-sm text-on-secondary-container">Oct 30, 2023</td>
+<td class="px-4 py-5 text-sm">t.kalu@health.org</td>
+<td class="px-4 py-5 text-right">
+<button class="text-tertiary text-xs font-bold hover:underline">Schedule</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<div class="fixed bottom-8 right-8 flex flex-col gap-4">
+<button class="w-14 h-14 rounded-full bg-primary-container text-white shadow-2xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center group relative">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="absolute right-full mr-4 bg-on-surface text-white text-[10px] px-2 py-1 rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity uppercase font-bold">New Donation</span>
+</button>
+</div>
+<script>
+  const API_BASE = "http://localhost:8000";
+
+  // ─────────────────────────────────────────────
+  // MODAL SYSTEM
+  // ─────────────────────────────────────────────
+
+  function showModal(title, bodyHTML, onConfirm = null, confirmText = "Submit") {
+    const existing = document.getElementById("global-modal");
+    if (existing) existing.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "global-modal";
+    modal.className = "fixed inset-0 z-50 flex items-center justify-center bg-black/50";
+    modal.innerHTML = `
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
+        <div class="px-6 py-4 border-b border-surface-container flex justify-between items-center">
+          <h3 class="text-lg font-bold font-headline">${title}</h3>
+          <button onclick="closeModal()" class="text-on-secondary-container hover:text-on-surface">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <div class="px-6 py-4">${bodyHTML}</div>
+        <div class="px-6 py-4 border-t border-surface-container flex justify-end gap-3">
+          <button onclick="closeModal()" class="px-4 py-2 rounded-lg text-sm font-bold text-on-secondary-container hover:bg-surface-container transition-colors">Cancel</button>
+          ${onConfirm ? `<button onclick="${onConfirm}()" class="px-4 py-2 rounded-lg text-sm font-bold bg-primary text-white hover:brightness-110 transition-all">${confirmText}</button>` : ""}
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("global-modal");
+    if (modal) modal.remove();
+  }
+
+  function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.className = `fixed bottom-24 right-8 z-50 px-5 py-3 rounded-xl shadow-lg text-white text-sm font-bold transition-all ${type === "success" ? "bg-tertiary" : "bg-error"}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+
+  // ─────────────────────────────────────────────
+  // DATA LOADING
+  // ─────────────────────────────────────────────
+
+  async function loadInventory() {
+    const res = await fetch(`${API_BASE}/stats`);
+    const data = await res.json();
+    const totals = data.inventory_by_blood_type;
+
+    const idMap = {
+      "A+": "Apos", "A-": "Aneg", "B+": "Bpos", "B-": "Bneg",
+      "O+": "Opos", "O-": "Oneg", "AB+": "ABpos", "AB-": "ABneg"
+    };
+
+    const maxUnits = Math.max(...Object.values(totals));
+    for (const [type, units] of Object.entries(totals)) {
+      const key = idMap[type];
+      const bar = document.getElementById(`bar-${key}`);
+      const label = document.getElementById(`units-${key}`);
+      if (bar) {
+  bar.style.height = `${(units / maxUnits) * 100}%`;
+  bar.style.minHeight = "4px";
+  bar.style.display = "block";
+}
+      if (label) label.textContent = units;
+    }
+
+    document.getElementById("total-units").textContent =
+      data.total_units_available.toLocaleString();
+
+    const minType = Object.entries(totals).sort((a, b) => a[1] - b[1])[0];
+    if (minType) {
+      document.getElementById("critical-type").textContent = minType[0];
+      document.getElementById("critical-msg").textContent =
+        `Inventory for ${minType[0]} is critically low at ${minType[1]} units. Immediate action required.`;
+    }
+  }
+
+  async function loadRequests() {
+    const res = await fetch(`${API_BASE}/requests`);
+    const requests = await res.json();
+    const tbody = document.getElementById("requests-tbody");
+    if (!requests.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="px-8 py-6 text-center text-on-secondary-container text-sm">No pending requests</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = requests.map(req => `
+      <tr class="hover:bg-surface-container-lowest transition-colors">
+        <td class="px-8 py-4">
+          <div class="flex flex-col">
+            <span class="font-bold text-sm">${req.hospital}</span>
+            <span class="text-[10px] text-on-secondary-container">${req.patient_name}</span>
+          </div>
+        </td>
+        <td class="px-8 py-4"><span class="font-bold text-primary">${req.blood_type}</span></td>
+        <td class="px-8 py-4 text-sm">${req.units_needed} Units</td>
+        <td class="px-8 py-4">
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-black uppercase ${urgencyClass(req.urgency)}">${req.urgency}</span>
+        </td>
+        <td class="px-8 py-4 text-right">
+          <span class="text-[11px] font-semibold text-on-surface-variant">${req.status}</span>
+        </td>
+      </tr>`).join("");
+  }
+
+  async function loadDonors() {
+    const res = await fetch(`${API_BASE}/donors`);
+    const donors = await res.json();
+    const tbody = document.getElementById("donors-tbody");
+    if (!donors.length) {
+      tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-on-secondary-container text-sm">No donors registered yet</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = donors.slice(0, 5).map(d => {
+      const initials = d.name.split(" ").map(n => n[0]).join("").toUpperCase();
+      const lastDonation = d.last_donation_date
+        ? new Date(d.last_donation_date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+        : "Never";
+      return `
+        <tr class="group hover:bg-surface-container-low transition-colors">
+          <td class="px-4 py-5">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">${initials}</div>
+              <span class="font-bold text-sm">${d.name}</span>
+            </div>
+          </td>
+          <td class="px-4 py-5"><span class="font-bold text-sm bg-surface-container px-2 py-1 rounded">${d.blood_type}</span></td>
+          <td class="px-4 py-5 text-sm text-on-secondary-container">${lastDonation}</td>
+          <td class="px-4 py-5 text-sm">${d.contact}</td>
+          <td class="px-4 py-5 text-right">
+            <button onclick="openScheduleModal('${d.name}', '${d.contact}')" class="text-tertiary text-xs font-bold hover:underline">Schedule</button>
+          </td>
+        </tr>`;
+    }).join("");
+  }
+
+  function urgencyClass(urgency) {
+    if (urgency === "critical") return "bg-error-container text-on-error-container";
+    if (urgency === "urgent")   return "bg-secondary-container text-on-secondary-container";
+    return "bg-tertiary-fixed text-on-tertiary-fixed-variant";
+  }
+
+  // ─────────────────────────────────────────────
+  // BUTTON ACTIONS
+  // ─────────────────────────────────────────────
+
+  // 1. Emergency Alert
+  function openEmergencyAlert() {
+    showModal("🚨 Send Emergency Alert",
+      `<div class="space-y-4">
+        <p class="text-sm text-on-secondary-container">This will flag a critical blood shortage alert.</p>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Blood Type Needed</label>
+          <select id="alert-blood-type" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm">
+            <option>O-</option><option>O+</option><option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Urgency</label>
+          <select id="alert-urgency" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm">
+            <option value="critical">Critical</option>
+            <option value="urgent">Urgent</option>
+            <option value="routine">Routine</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Hospital</label>
+          <input id="alert-hospital" type="text" placeholder="Hospital name" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+      </div>`,
+      "submitEmergencyAlert", "Send Alert 🚨");
+  }
+
+  async function submitEmergencyAlert() {
+    const bloodType = document.getElementById("alert-blood-type").value;
+    const urgency = document.getElementById("alert-urgency").value;
+    const hospital = document.getElementById("alert-hospital").value || "Central Blood Bank";
+    closeModal();
+    showToast(`🚨 Emergency alert sent for ${bloodType} at ${hospital}!`);
+  }
+
+  // 2. Request Transfer
+  function openRequestTransfer() {
+    showModal("Request Blood Transfer",
+      `<div class="space-y-4">
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Patient Name</label>
+          <input id="req-patient" type="text" placeholder="Full name" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Blood Type</label>
+          <select id="req-blood-type" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm">
+            <option>O-</option><option>O+</option><option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Units Needed</label>
+          <input id="req-units" type="number" min="1" max="50" placeholder="e.g. 4" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Hospital</label>
+          <input id="req-hospital" type="text" placeholder="Hospital name" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Urgency</label>
+          <select id="req-urgency" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm">
+            <option value="critical">Critical</option>
+            <option value="urgent">Urgent</option>
+            <option value="routine">Routine</option>
+          </select>
+        </div>
+      </div>`,
+      "submitRequestTransfer", "Submit Request");
+  }
+
+  async function submitRequestTransfer() {
+    const body = {
+      patient_name: document.getElementById("req-patient").value,
+      blood_type:   document.getElementById("req-blood-type").value,
+      units_needed: parseInt(document.getElementById("req-units").value),
+      hospital:     document.getElementById("req-hospital").value,
+      urgency:      document.getElementById("req-urgency").value,
+    };
+    if (!body.patient_name || !body.units_needed || !body.hospital) {
+      showToast("Please fill all fields!", "error"); return;
+    }
+    const res = await fetch(`${API_BASE}/request_blood`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    closeModal();
+    if (res.ok) {
+      showToast("✅ Blood request submitted!");
+      loadRequests();
+    } else {
+      showToast("❌ Failed to submit request", "error");
+    }
+  }
+
+  // 3. New Donation (FAB button)
+  function openNewDonation() {
+    showModal("Add New Donor",
+      `<div class="space-y-4">
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Full Name</label>
+          <input id="donor-name" type="text" placeholder="e.g. Arjun Mehta" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Blood Type</label>
+            <select id="donor-blood-type" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm">
+              <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+              <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Age</label>
+            <input id="donor-age" type="number" min="18" max="65" placeholder="18-65" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+          </div>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Contact (Phone/Email)</label>
+          <input id="donor-contact" type="text" placeholder="e.g. 9876543210" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">City</label>
+          <input id="donor-city" type="text" placeholder="e.g. Ahmedabad" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Last Donation Date (optional)</label>
+          <input id="donor-last-donation" type="date" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+      </div>`,
+      "submitNewDonor", "Register Donor");
+  }
+
+  async function submitNewDonor() {
+    const body = {
+      name:               document.getElementById("donor-name").value,
+      blood_type:         document.getElementById("donor-blood-type").value,
+      age:                parseInt(document.getElementById("donor-age").value),
+      contact:            document.getElementById("donor-contact").value,
+      city:               document.getElementById("donor-city").value,
+      last_donation_date: document.getElementById("donor-last-donation").value || null,
+    };
+    if (!body.name || !body.age || !body.contact || !body.city) {
+      showToast("Please fill all required fields!", "error"); return;
+    }
+    const res = await fetch(`${API_BASE}/add_donor`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    closeModal();
+    if (res.ok) {
+      showToast("✅ Donor registered successfully!");
+      loadDonors();
+    } else {
+      const err = await res.json();
+      showToast(`❌ ${err.detail}`, "error");
+    }
+  }
+
+  // 4. Schedule Donor
+  function openScheduleModal(name, contact) {
+    showModal("Schedule Donation",
+      `<div class="space-y-4">
+        <p class="text-sm">Scheduling appointment for <strong>${name}</strong></p>
+        <p class="text-sm text-on-secondary-container">Contact: ${contact}</p>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Appointment Date</label>
+          <input id="schedule-date" type="date" class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm"/>
+        </div>
+        <div>
+          <label class="text-xs font-bold uppercase tracking-wider text-on-secondary-container">Notes</label>
+          <textarea id="schedule-notes" placeholder="Any special instructions..." class="mt-1 w-full border border-outline-variant rounded-lg px-3 py-2 text-sm h-20 resize-none"></textarea>
+        </div>
+      </div>`,
+      "submitSchedule", "Confirm Appointment");
+  }
+
+  function submitSchedule() {
+    const date = document.getElementById("schedule-date").value;
+    if (!date) { showToast("Please select a date!", "error"); return; }
+    closeModal();
+    showToast(`✅ Appointment scheduled for ${new Date(date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}`);
+  }
+
+  // 5. View All Requests
+  async function openViewAllRequests() {
+    const res = await fetch(`${API_BASE}/requests`);
+    const requests = await res.json();
+    const rows = requests.length
+      ? requests.map(req => `
+          <tr class="border-b border-surface-container text-sm">
+            <td class="py-2 pr-4 font-bold">${req.hospital}</td>
+            <td class="py-2 pr-4 font-bold text-primary">${req.blood_type}</td>
+            <td class="py-2 pr-4">${req.units_needed}</td>
+            <td class="py-2 pr-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${urgencyClass(req.urgency)}">${req.urgency}</span></td>
+            <td class="py-2">${req.status}</td>
+          </tr>`).join("")
+      : `<tr><td colspan="5" class="py-4 text-center text-on-secondary-container">No requests found</td></tr>`;
+
+    showModal("All Hospital Requests",
+      `<div class="overflow-x-auto max-h-80 overflow-y-auto">
+        <table class="w-full text-left">
+          <thead class="text-[10px] font-black uppercase tracking-widest text-on-secondary-container sticky top-0 bg-white">
+            <tr>
+              <th class="pb-2 pr-4">Hospital</th>
+              <th class="pb-2 pr-4">Type</th>
+              <th class="pb-2 pr-4">Units</th>
+              <th class="pb-2 pr-4">Urgency</th>
+              <th class="pb-2">Status</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>`);
+  }
+
+  // 6. Search
+  document.querySelector('input[placeholder="Search records..."]').addEventListener("input", function () {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll("#requests-tbody tr, #donors-tbody tr").forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(query) ? "" : "none";
+    });
+  });
+
+  // 7. Wire up all buttons
+  document.addEventListener("DOMContentLoaded", () => {
+    // Emergency Alert button
+    document.querySelector("button:has(.material-symbols-outlined:not([class*='notifications']):not([class*='settings']))");
+    document.querySelectorAll("button").forEach(btn => {
+      if (btn.textContent.includes("Emergency Alert")) btn.onclick = openEmergencyAlert;
+      if (btn.textContent.includes("Request Transfer")) btn.onclick = openRequestTransfer;
+      if (btn.textContent.includes("View All Requests")) btn.onclick = openViewAllRequests;
+    });
+
+    document.querySelectorAll("button:has(span.material-symbols-outlined)").forEach(btn => {
+      const icon = btn.querySelector(".material-symbols-outlined");
+      if (icon && icon.textContent.trim() === "add") btn.onclick = openNewDonation;
+    });
+
+    // View All Requests link
+    document.querySelectorAll("button").forEach(btn => {
+      if (btn.textContent.trim() === "View All Requests") btn.onclick = openViewAllRequests;
+    });
+  });
+
+  // ─────────────────────────────────────────────
+// SIDEBAR NAVIGATION
+// ─────────────────────────────────────────────
+document.querySelectorAll("nav a").forEach(link => {
+  link.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    // Remove active styles from all links
+    document.querySelectorAll("nav a").forEach(l => {
+      l.classList.remove("text-teal-700", "font-bold", "border-r-4", "border-teal-600", "translate-x-1");
+      l.classList.add("text-slate-600");
+    });
+
+    // Add active style to clicked link
+    this.classList.add("text-teal-700", "font-bold", "border-r-4", "border-teal-600", "translate-x-1");
+    this.classList.remove("text-slate-600");
+
+    const text = this.querySelector("span:last-child").textContent.trim().toUpperCase();
+
+    if (text === "INVENTORY") {
+      document.getElementById("section-inventory").scrollIntoView({ behavior: "smooth" });
+    } else if (text === "HOSPITAL REQUESTS") {
+      document.getElementById("section-requests").scrollIntoView({ behavior: "smooth" });
+    } else if (text === "DONORS") {
+      document.getElementById("section-donors").scrollIntoView({ behavior: "smooth" });
+    } else if (text === "ANALYTICS") {
+      window.open("http://localhost:8501", "_blank");
+    } else if (text === "SETTINGS") {
+      showModal("Settings", `
+        <div class="space-y-4">
+          <div class="flex justify-between items-center py-3 border-b border-surface-container">
+            <span class="text-sm font-bold">Dark Mode</span>
+            <button onclick="document.documentElement.classList.toggle('dark')" class="px-3 py-1 rounded-lg bg-surface-container text-xs font-bold">Toggle</button>
+          </div>
+          <div class="flex justify-between items-center py-3 border-b border-surface-container">
+            <span class="text-sm font-bold">Backend URL</span>
+            <span class="text-xs text-on-secondary-container">http://localhost:8000</span>
+          </div>
+          <div class="flex justify-between items-center py-3 border-b border-surface-container">
+            <span class="text-sm font-bold">Analytics Dashboard</span>
+            <button onclick="window.open('http://localhost:8501','_blank')" class="px-3 py-1 rounded-lg bg-tertiary text-white text-xs font-bold">Open</button>
+          </div>
+          <div class="flex justify-between items-center py-3">
+            <span class="text-sm font-bold">Refresh Data</span>
+            <button onclick="loadInventory();loadRequests();loadDonors();closeModal();showToast('✅ Data refreshed!')" class="px-3 py-1 rounded-lg bg-primary text-white text-xs font-bold">Refresh</button>
+          </div>
+        </div>`);
+    }
+  });
+});
+  // ─────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────
+  loadInventory();
+  loadRequests();
+  loadDonors();
+</script>
+</body>
+</html>
