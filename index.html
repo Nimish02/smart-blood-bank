@@ -395,6 +395,73 @@
 </section>
 </div>
 </div>
+<!-- AI Insights Section -->
+<div class="grid grid-cols-1 gap-6 mt-6">
+<section id="section-ai" class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/5">
+<div class="px-8 py-6 border-b border-surface-container flex justify-between items-center">
+  <div>
+    <h3 class="text-xl font-bold font-headline">🤖 AI Insights</h3>
+    <p class="text-sm text-on-secondary-container mt-1">ML-powered demand forecast & donor predictions</p>
+  </div>
+  <button onclick="loadAIInsights()" class="px-4 py-2 bg-primary text-white rounded-lg text-xs font-bold hover:brightness-110">Refresh AI</button>
+</div>
+<div class="p-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+  <!-- Demand Forecast -->
+  <div>
+    <h4 class="font-bold text-sm uppercase tracking-wider text-on-secondary-container mb-4">📈 30-Day Blood Demand Forecast</h4>
+    <div id="demand-chart" style="display:flex; align-items:flex-end; gap:3px; height:120px; width:100%;">
+      <p class="text-sm text-on-secondary-container">Loading forecast...</p>
+    </div>
+    <div class="mt-4 flex gap-4">
+      <div class="bg-surface-container rounded-lg p-3 flex-1 text-center">
+        <p class="text-xs text-on-secondary-container">Avg Daily Demand</p>
+        <p id="avg-demand" class="text-2xl font-bold text-primary mt-1">--</p>
+      </div>
+      <div class="bg-surface-container rounded-lg p-3 flex-1 text-center">
+        <p class="text-xs text-on-secondary-container">Trend</p>
+        <p id="demand-trend" class="text-2xl font-bold text-tertiary mt-1">--</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donor Response Predictor -->
+  <div>
+    <h4 class="font-bold text-sm uppercase tracking-wider text-on-secondary-container mb-4">🎯 Donor Response Predictor</h4>
+    <div class="space-y-3">
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-xs text-on-secondary-container">Age</label>
+          <input id="ai-age" type="number" value="28" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm mt-1"/>
+        </div>
+        <div>
+          <label class="text-xs text-on-secondary-container">Total Donations</label>
+          <input id="ai-donations" type="number" value="5" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm mt-1"/>
+        </div>
+        <div>
+          <label class="text-xs text-on-secondary-container">Days Since Last Donation</label>
+          <input id="ai-days" type="number" value="45" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm mt-1"/>
+        </div>
+        <div>
+          <label class="text-xs text-on-secondary-container">Responded Last Campaign</label>
+          <select id="ai-responded" class="w-full border border-outline-variant rounded-lg px-3 py-2 text-sm mt-1">
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="predictDonor()" class="w-full bg-tertiary text-white rounded-lg py-2 text-sm font-bold hover:brightness-110">Predict Response</button>
+      <div id="prediction-result" class="hidden bg-surface-container rounded-lg p-4 text-center">
+        <p id="prediction-score" class="text-3xl font-bold text-primary">--</p>
+        <p id="prediction-label" class="text-sm text-on-secondary-container mt-1">--</p>
+        <p id="prediction-recommendation" class="text-xs font-bold mt-2">--</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</section>
+</div>
 </main>
 <!-- Floating Action Button -->
 <div class="fixed bottom-8 right-8 flex flex-col gap-4">
@@ -850,9 +917,47 @@ document.querySelectorAll("nav a").forEach(link => {
     }
   });
 });
+// ─────────────────────────────────────────────
+// AI INSIGHTS
+// ─────────────────────────────────────────────
+async function loadAIInsights() {
+  const res = await fetch(`${API_BASE}/predict_demand`);
+  const data = await res.json();
+
+  document.getElementById("avg-demand").textContent = data.average_daily_demand;
+  document.getElementById("demand-trend").textContent = data.trend === "increasing" ? "📈 Up" : "📉 Down";
+
+  const chart = document.getElementById("demand-chart");
+  const max = Math.max(...data.forecast.map(d => d.predicted_requests));
+  chart.innerHTML = data.forecast.map(d => `
+    <div style="flex:1; display:flex; flex-direction:column; align-items:center; height:100%;">
+      <div style="width:100%; background:#d32f2f; border-radius:2px 2px 0 0; height:${(d.predicted_requests/max)*100}%; margin-top:auto;"></div>
+    </div>
+  `).join("");
+}
+
+async function predictDonor() {
+  const age = document.getElementById("ai-age").value;
+  const donations = document.getElementById("ai-donations").value;
+  const days = document.getElementById("ai-days").value;
+  const responded = document.getElementById("ai-responded").value;
+
+  const res = await fetch(`${API_BASE}/predict_donor_response?age=${age}&total_donations=${donations}&last_donation_days=${days}&responded_last_campaign=${responded}`);
+  const data = await res.json();
+
+  const result = document.getElementById("prediction-result");
+  result.classList.remove("hidden");
+  document.getElementById("prediction-score").textContent = `${data.likelihood_percent}%`;
+  document.getElementById("prediction-label").textContent = data.will_respond ? "✅ Likely to Respond" : "❌ Unlikely to Respond";
+  document.getElementById("prediction-recommendation").textContent = data.recommendation;
+  document.getElementById("prediction-score").style.color = data.will_respond ? "#005f7b" : "#af101a";
+}
+
+loadAIInsights();
   // ─────────────────────────────────────────────
   // INIT
   // ─────────────────────────────────────────────
+  
   loadInventory();
   loadRequests();
   loadDonors();

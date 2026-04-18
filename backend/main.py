@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from typing import Optional, List
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
+from backend.ai_routes import router as ai_router
 
 from backend.database import get_db, engine
 import backend.models as models
@@ -17,6 +18,8 @@ app = FastAPI(
     description="API for managing blood donors, inventory, and blood requests with compatibility matching.",
     version="1.0.0",
 )
+
+app.include_router(ai_router)
 
 app.add_middleware(
     CORSMiddleware,
