@@ -1,7 +1,10 @@
 from sqlalchemy import Column, Integer, String, Date, DateTime, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from database import Base
+try:
+    from backend.database import Base
+except ImportError:
+    from database import Base
 
 
 class Donor(Base):
