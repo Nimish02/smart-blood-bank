@@ -16,7 +16,7 @@ except ImportError:
     import models, schemas, crud
     from compatibility import get_compatible_donors, COMPATIBILITY_MAP
     from ai_routes import router as ai_router
-
+    
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
