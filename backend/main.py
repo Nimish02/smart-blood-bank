@@ -4,9 +4,11 @@ from typing import Optional, List
 from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
 
-from database import get_db, engine
-import models, schemas, crud
-from compatibility import get_compatible_donors, COMPATIBILITY_MAP
+from backend.database import get_db, engine
+import backend.models as models
+import backend.schemas as schemas
+import backend.crud as crud
+from backend.compatibility import get_compatible_donors, COMPATIBILITY_MAP
 
 models.Base.metadata.create_all(bind=engine)
 
